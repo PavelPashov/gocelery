@@ -46,7 +46,7 @@ func NewAMQPQueue(name string) *AMQPQueue {
 	}
 }
 
-//AMQPCeleryBroker is RedisBroker for AMQP
+// AMQPCeleryBroker is RedisBroker for AMQP
 type AMQPCeleryBroker struct {
 	*amqp.Channel
 	Connection       *amqp.Connection
@@ -112,23 +112,23 @@ func (b *AMQPCeleryBroker) StartConsumingChannel() error {
 // SendCeleryMessage sends CeleryMessage to broker
 func (b *AMQPCeleryBroker) SendCeleryMessage(message *CeleryMessage) error {
 	taskMessage := message.GetTaskMessage()
-	queueName := "celery"
+
 	_, err := b.QueueDeclare(
-		queueName, // name
-		true,      // durable
-		false,     // autoDelete
-		false,     // exclusive
-		false,     // noWait
-		nil,       // args
+		b.Queue.Name,       // name
+		b.Queue.Durable,    // durable
+		b.Queue.AutoDelete, // autoDelete
+		false,              // exclusive
+		false,              // noWait
+		nil,                // args
 	)
 	if err != nil {
 		return err
 	}
 	err = b.ExchangeDeclare(
-		"default",
-		"direct",
-		true,
-		true,
+		b.Exchange.Name,
+		b.Exchange.Type,
+		b.Exchange.Durable,
+		b.Exchange.AutoDelete,
 		false,
 		false,
 		nil,
