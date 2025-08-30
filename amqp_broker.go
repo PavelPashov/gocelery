@@ -151,7 +151,7 @@ func (b *AMQPCeleryBroker) SendCeleryMessage(message *CeleryMessage) error {
 
 	return b.Publish(
 		"",
-		queueName,
+		b.Queue.Name,
 		false,
 		false,
 		publishMessage,
